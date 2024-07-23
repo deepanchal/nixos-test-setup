@@ -37,7 +37,8 @@
     nixosConfigurations.default = nixpkgs.lib.nixosSystem {
       specialArgs = {inherit inputs;};
       modules = [
-        # inputs.disko.nixosModules.default
+        inputs.disko.nixosModules.default
+        ./disk-config.nix
         # (import ./disko.nix {device = "/dev/vda";})
 
         ./configuration.nix
