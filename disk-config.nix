@@ -2,7 +2,6 @@
 # sudo nix --experimental-features "nix-command flakes" run github:nix-community/disko -- --mode disko ~/nixos/hosts/zephyrion/disk-config.nix
 # Ref: https://github.com/nix-community/disko/blob/master/docs/reference.md
 {lib, ...}: let
-  user = "deep";
   disk = "/dev/disk/by-id/ata-SanDisk_SSD_PLUS_240GB_191386466003";
   btrfsMountOptions = ["defaults" "noatime" "compress=zstd" "autodefrag" "ssd" "discard=async" "space_cache=v2"];
 in {
@@ -62,18 +61,6 @@ in {
                   };
                   "@home" = {
                     mountpoint = "/home";
-                    mountOptions = btrfsMountOptions;
-                  };
-                  "@projects" = {
-                    mountpoint = "/home/${user}/projects";
-                    mountOptions = btrfsMountOptions;
-                  };
-                  "@user_cache" = {
-                    mountpoint = "/home/${user}/.cache";
-                    mountOptions = btrfsMountOptions;
-                  };
-                  "@user_config" = {
-                    mountpoint = "/home/${user}/.config";
                     mountOptions = btrfsMountOptions;
                   };
                   "@srv" = {
