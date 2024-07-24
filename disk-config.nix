@@ -1,15 +1,19 @@
 # Format disk with this command:
 # sudo nix --experimental-features "nix-command flakes" run github:nix-community/disko -- --mode disko ~/nixos/hosts/zephyrion/disk-config.nix
 # Ref: https://github.com/nix-community/disko/blob/master/docs/reference.md
-{lib, ...}: let
-  disk = "/dev/disk/by-id/ata-SanDisk_SSD_PLUS_240GB_191386466003";
+{
+  lib,
+  # This is being set in flake.nix
+  device ? throw "Set this to your disk device, e.g. /dev/sda or /dev/disk/by-id/ata-SanDisk_SSD_PLUS_240GB_191386466003",
+  ...
+}: let
   btrfsMountOptions = ["defaults" "noatime" "compress=zstd" "autodefrag" "ssd" "discard=async" "space_cache=v2"];
 in {
   disko.devices = {
     disk = {
       main = {
         type = "disk";
-        device = disk;
+        device = device;
         content = {
           type = "gpt";
           partitions = {
