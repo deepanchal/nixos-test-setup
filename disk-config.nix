@@ -41,63 +41,34 @@ in {
               content = {
                 type = "btrfs";
                 extraArgs = ["-f" "-L NIXOS"];
-                postMountHook = ''
-                  if [ -d /mnt/var/lib/libvirt ]; then
-                  chattr +C /mnt/var/lib/libvirt
-                  fi
-                '';
                 subvolumes = {
-                  "" = {
-                    mountpoint = "/mnt/defvol";
-                    mountOptions = btrfsMountOptions;
-                  };
-                  "@" = {
-                    mountpoint = "/";
-                    mountOptions = btrfsMountOptions;
-                  };
-                  "@snapshots" = {
-                    mountpoint = "/.snapshots";
-                    mountOptions = btrfsMountOptions;
-                  };
-                  "@home_root" = {
-                    mountpoint = "/root";
-                    mountOptions = btrfsMountOptions;
-                  };
-                  "@home" = {
-                    mountpoint = "/home";
-                    mountOptions = btrfsMountOptions;
-                  };
-                  "@srv" = {
-                    mountpoint = "/srv";
-                    mountOptions = btrfsMountOptions;
-                  };
-                  "@opt" = {
-                    mountpoint = "/opt";
-                    mountOptions = btrfsMountOptions;
+                  # mount the top-level subvolume at /btr_pool
+                  # it will be used by btrbk to create snapshots
+                  "/" = {
+                    mountpoint = "/btr_pool";
+                    # btrfs's top-level subvolume, internally has an id 5
+                    # we can access all other subvolumes from this subvolume.
+                    mountOptions = ["subvolid=5"];
                   };
                   "@nix" = {
                     mountpoint = "/nix";
                     mountOptions = btrfsMountOptions;
                   };
-                  "@var_log" = {
-                    mountpoint = "/var/log";
+                  "@persistent" = {
+                    mountpoint = "/persistent";
                     mountOptions = btrfsMountOptions;
                   };
-                  "@var_cache" = {
-                    mountpoint = "/var/cache";
+                  "@snapshots" = {
+                    mountpoint = "/snapshots";
                     mountOptions = btrfsMountOptions;
                   };
-                  "@var_tmp" = {
-                    mountpoint = "/var/tmp";
+                  "@tmp" = {
+                    mountpoint = "/tmp";
                     mountOptions = btrfsMountOptions;
                   };
-                  "@var_libvirt" = {
-                    mountpoint = "/var/lib/libvirt";
-                    mountOptions = btrfsMountOptions;
-                  };
-                  "@docker" = {
-                    mountpoint = "/var/lib/docker";
-                    mountOptions = ["defaults"];
+                  "@swap" = {
+                    mountpoint = "/swap";
+                    swap.swapfile.size = "4096M";
                   };
                 };
               };
