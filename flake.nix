@@ -42,9 +42,7 @@
         (import ./disk-config.nix {device = "/dev/disk/by-id/ata-SanDisk_SSD_PLUS_240GB_191386466003";})
 
         ./configuration.nix
-
-        # inputs.home-manager.nixosModules.default
-        # inputs.impermanence.nixosModules.impermanence
+        ./impermanence.nix
       ];
     };
   };
