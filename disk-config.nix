@@ -54,8 +54,8 @@ in {
                     mountpoint = "/nix";
                     mountOptions = btrfsMountOptions;
                   };
-                  "@persistent" = {
-                    mountpoint = "/persistent";
+                  "@persist" = {
+                    mountpoint = "/persist";
                     mountOptions = btrfsMountOptions;
                   };
                   "@snapshots" = {
