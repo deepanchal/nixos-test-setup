@@ -18,7 +18,7 @@
 
   boot.loader.grub.enable = true;
   boot.loader.grub.efiSupport = true;
-  boot.loader.grub.efiInstallAsRemovable = true;
+  # boot.loader.grub.efiInstallAsRemovable = true;
 
   # networking.hostName = "nixos"; # Define your hostname.
   # Pick only one of the below networking options.

@@ -2,7 +2,6 @@
 # sudo nix --experimental-features "nix-command flakes" run github:nix-community/disko -- --mode disko ~/nixos/hosts/zephyrion/disk-config.nix
 # Ref: https://github.com/nix-community/disko/blob/master/docs/reference.md
 {
-  lib,
   # This is being set in flake.nix
   device ? throw "Set this to your disk device, e.g. /dev/sda or /dev/disk/by-id/ata-SanDisk_SSD_PLUS_240GB_191386466003",
   ...
@@ -10,6 +9,17 @@
   btrfsMountOptions = ["defaults" "noatime" "compress=zstd" "autodefrag" "ssd" "discard=async" "space_cache=v2"];
 in {
   disko.devices = {
+    nodev."/" = {
+      fsType = "tmpfs";
+      mountOptions = [
+        "size=4G"
+        "defaults"
+        # set mode to 755, otherwise systemd will set it to 777, which cause problems.
+        # relatime: Update inode access times relative to modify or change time.
+        "mode=755"
+      ];
+    };
+
     disk = {
       main = {
         type = "disk";
