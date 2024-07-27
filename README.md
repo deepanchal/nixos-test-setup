@@ -8,7 +8,18 @@ Run this command to setup nixos on your drive.
 Replace `/dev/disk/by-id/ata-SanDisk_SSD_PLUS_240GB_191386466003` with your drive to format it with disko and install nixos on the drive.
 
 ```bash
+# one-liner after cloning the repo
 sudo nix run --experimental-features "nix-command flakes" 'github:nix-community/disko#disko-install' --  --write-efi-boot-entries --disk main /dev/disk/by-id/ata-SanDisk_SSD_PLUS_240GB_191386466003 --flake .#default
+
+# one-liner without cloning the repo
+sudo nix run --experimental-features "nix-command flakes" 'github:nix-community/disko#disko-install' --  --write-efi-boot-entries --disk main /dev/disk/by-id/ata-SanDisk_SSD_PLUS_240GB_191386466003 --flake github:deepanchal/nixos-test-setup#default
+
+# step-by-step
+
+## format disk
+sudo nix --experimental-features "nix-command flakes" run github:nix-community/disko -- --mode disko ./disk-config.nix
+## install nixos
+sudo nixos-install --root /mnt --no-root-password --show-trace --verbose --flake .#default
 ```
 
 ## References
