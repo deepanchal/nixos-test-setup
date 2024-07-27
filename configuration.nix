@@ -20,6 +20,43 @@
   boot.loader.grub.efiSupport = true;
   # boot.loader.grub.efiInstallAsRemovable = true;
 
+  # From: https://github.com/nix-community/impermanence?tab=readme-ov-file#btrfs-subvolumes
+  boot.initrd.postDeviceCommands =
+    lib.mkAfter
+    /*
+    bash
+    */
+    ''
+      echo "impermanence: Starting backup and cleanup procedure"
+      mkdir /btrfs_tmp
+      mount /dev/disk/by-label/NIXOS /btrfs_tmp
+      if [[ -e /btrfs_tmp/@ ]]; then
+          mkdir -p /btrfs_tmp/old_roots
+          timestamp=$(date --date="@$(stat -c %Y /btrfs_tmp/@)" "+%Y-%m-%-d_%H:%M:%S")
+          mv /btrfs_tmp/@ "/btrfs_tmp/old_roots/$timestamp"
+          echo "impermanence: Old root subvolume moved to /btrfs_tmp/old_@s/$timestamp"
+      fi
+
+      delete_subvolume_recursively() {
+          IFS=$'\n'
+          for i in $(btrfs subvolume list -o "$1" | cut -f 9- -d ' '); do
+              delete_subvolume_recursively "/btrfs_tmp/$i"
+          done
+          btrfs subvolume delete "$1"
+          echo "impermanence: Deleted subvolume $1"
+      }
+
+      for i in $(find /btrfs_tmp/old_roots/ -maxdepth 1 -mtime +30); do
+          delete_subvolume_recursively "$i"
+      done
+
+      btrfs subvolume create /btrfs_tmp/@
+      echo "impermanence: Created new root subvolume at /btrfs_tmp/@"
+
+      umount /btrfs_tmp
+      echo "impermanence: Done"
+    '';
+
   # networking.hostName = "nixos"; # Define your hostname.
   # Pick only one of the below networking options.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
@@ -82,6 +119,10 @@
     vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
     wget
   ];
+
+  virtualisation = {
+    docker.enable = true;
+  };
 
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
