@@ -13,6 +13,9 @@ sudo nix run --experimental-features "nix-command flakes" 'github:nix-community/
 
 ## References
 
+- https://grahamc.com/blog/erase-your-darlings/
+- https://mt-caret.github.io/blog/posts/2020-06-29-optin-state.html
+- https://elis.nu/blog/2020/06/nixos-tmpfs-as-home/
 - https://github.com/vimjoyer/impermanent-setup/blob/main/final/disko.nix
 - https://github.com/ryan4yin/nix-config/blob/783d61999cfbd31341f28d8531c544a77c570901/hosts/k8s/disko-config/README.md#2-partition-the-ssd--install-nixos-via-disko
 - https://github.com/nix-community/impermanence
