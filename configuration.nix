@@ -13,11 +13,11 @@
   ];
 
   # Use the systemd-boot EFI boot loader.
-  # boot.loader.systemd-boot.enable = true;
-  # boot.loader.efi.canTouchEfiVariables = true;
+  boot.loader.systemd-boot.enable = true;
+  boot.loader.efi.canTouchEfiVariables = true;
 
-  boot.loader.grub.enable = true;
-  boot.loader.grub.efiSupport = true;
+  # boot.loader.grub.enable = true;
+  # boot.loader.grub.efiSupport = true;
   # boot.loader.grub.efiInstallAsRemovable = true;
 
   # From: https://github.com/nix-community/impermanence?tab=readme-ov-file#btrfs-subvolumes
@@ -34,7 +34,7 @@
           mkdir -p /btrfs_tmp/old_roots
           timestamp=$(date --date="@$(stat -c %Y /btrfs_tmp/@)" "+%Y-%m-%-d_%H:%M:%S")
           mv /btrfs_tmp/@ "/btrfs_tmp/old_roots/$timestamp"
-          echo "impermanence: Old root subvolume moved to /btrfs_tmp/old_@s/$timestamp"
+          echo "impermanence: Old root subvolume moved to /btrfs_tmp/old_roots/$timestamp"
       fi
 
       delete_subvolume_recursively() {
@@ -117,6 +117,7 @@
   # $ nix search wget
   environment.systemPackages = with pkgs; [
     vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
+    git
     wget
   ];
 
