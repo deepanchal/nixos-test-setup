@@ -22,6 +22,18 @@ sudo nix --experimental-features "nix-command flakes" run github:nix-community/d
 sudo nixos-install --root /mnt --no-root-password --show-trace --verbose --flake .#default
 ```
 
+
+## Commands
+
+```bash
+sudo nix --experimental-features "nix-command flakes" run github:nix-community/disko -- --mode disko ./disko.nix --arg device '"/dev/disk/by-id/ata-SanDisk_SSD_PLUS_240GB_191386466003"'
+nix flake check
+sudo nixos-generate-config --no-filesystems --root /mnt
+sudo cp configuration.nix disko.nix flake.lock flake.nix hardware-configuration.nix home.nix README.md /mnt/etc/nixos 
+sudo cp -rv /mnt/etc/nixos /mnt/persist
+sudo nixos-install --root /mnt --no-root-password --show-trace --verbose --flake .#default
+```
+
 ## References
 
 - https://grahamc.com/blog/erase-your-darlings/

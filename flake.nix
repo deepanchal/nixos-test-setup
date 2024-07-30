@@ -1,4 +1,3 @@
-# Ref: https://github.com/vimjoyer/impermanent-setup/blob/main/final/flake.nix
 {
   description = "Nixos config flake";
 
@@ -20,28 +19,17 @@
     };
   };
 
-  outputs = {
-    self,
-    nixpkgs,
-    home-manager,
-    ...
-  } @ inputs: let
-    inherit (self) outputs;
-  in {
-    # NixOS configuration entrypoint
-    # Available through 'nixos-rebuild --flake .#your-hostname'
-    # Any one of these commands should work
-    # sudo nixos-rebuild switch --flake ~/nixos/#zephyrion
-    # nh os switch ~/nixos -H zephyrion
-    # nh os switch
+  outputs = {nixpkgs, ...} @ inputs: {
     nixosConfigurations.default = nixpkgs.lib.nixosSystem {
       specialArgs = {inherit inputs;};
       modules = [
         inputs.disko.nixosModules.default
-        (import ./disk-config.nix {device = "/dev/disk/by-id/ata-SanDisk_SSD_PLUS_240GB_191386466003";})
+        (import ./disko.nix {device = "/dev/disk/by-id/ata-SanDisk_SSD_PLUS_240GB_191386466003";})
 
         ./configuration.nix
-        ./impermanence.nix
+
+        inputs.home-manager.nixosModules.default
+        inputs.impermanence.nixosModules.impermanence
       ];
     };
   };
