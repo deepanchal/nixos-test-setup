@@ -39,13 +39,6 @@
               content = {
                 type = "btrfs";
                 extraArgs = ["-f" "-L NIXOS"];
-                postCreateHook = ''
-                  # Take blank root snapshot for impermanence
-                  MNTPOINT=$(mktemp -d)
-                  mount "/dev/disk/by-label/NIXOS" "$MNTPOINT" -o subvol=/
-                  trap 'umount $MNTPOINT; rm -rf $MNTPOINT' EXIT
-                  btrfs subvolume snapshot -r $MNTPOINT/@ $MNTPOINT/@root-blank
-                '';
                 subvolumes = {
                   # mount the top-level subvolume at /btr_pool
                   # it will be used by btrbk to create snapshots
