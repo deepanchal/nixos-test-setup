@@ -42,19 +42,19 @@
     # the following directories will be passed to /persist/home/$USER
     users.deep = {
       directories = [
-        {
-          directory = ".ssh";
-          mode = "0700";
-        }
-
-        # neovim / remmina / flatpak / ...
+        "Downloads"
+        "Music"
+        "Pictures"
+        "Documents"
+        "Videos"
+        "VirtualBox VMs"
+        ".gnupg"
+        ".ssh"
         ".local/share"
         ".local/state"
-
-        # language package managers
-        ".npm"
       ];
       files = [
+        ".screenrc"
       ];
     };
   };

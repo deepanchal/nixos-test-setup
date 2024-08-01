@@ -21,7 +21,7 @@
   # boot.loader.grub.efiInstallAsRemovable = true;
 
   boot.initrd.systemd.enable = true;
-  boot.initrd.systemd.services.rollback = {
+  boot.initrd.systemd.services.rollbackup = {
     description = "Rollback BTRFS root subvolume to a pristine state";
     requires = ["initrd-root-device.target"];
     after = ["local-fs-pre.target" "initrd-root-device.target"];
@@ -129,11 +129,14 @@
     vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
     git
     wget
+    yazi
+    alacritty
+    home-manager
   ];
 
-  virtualisation = {
-    docker.enable = true;
-  };
+  # virtualisation = {
+  #   docker.enable = true;
+  # };
 
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
